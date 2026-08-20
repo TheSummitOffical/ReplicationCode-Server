@@ -1,3 +1,4 @@
+import resourcesRoutes from "./routes/resources.js";
 import shellRoutes from "./routes/shell.js";
 import Fastify from "fastify";
 
@@ -169,3 +170,5 @@ app.get("/health", async () => {
 export default app;
 
 await app.register(shellRoutes);
+await app.register(resourcesRoutes);
+

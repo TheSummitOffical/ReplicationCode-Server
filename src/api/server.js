@@ -1,3 +1,4 @@
+import shellRoutes from "./routes/shell.js";
 import Fastify from "fastify";
 
 import { AccountService } from "../auth/accounts.js";
@@ -166,3 +167,5 @@ app.get("/health", async () => {
 });
 
 export default app;
+
+await app.register(shellRoutes);

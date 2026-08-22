@@ -16,6 +16,9 @@ export function getPTY(session_id, cwd) {
       }
     });
 
+    // Disable terminal input echo
+    terminal.write("stty -echo\r");
+
     sessions.set(session_id, terminal);
   }
 

@@ -17,6 +17,9 @@ export function runPTY({
     }
   });
 
+  // Disable terminal input echo
+  terminal.write("stty -echo\r");
+
   terminal.onData((data) => {
     if (onData) {
       onData(data);

@@ -17,12 +17,21 @@ RUN apk add --no-cache \
     openssl-dev \
     pkgconfig
 
+# Create users
 RUN addgroup -S replication && \
-    adduser -S replication -G replication
+    adduser -S replication -G replication && \
+    addgroup -S apk && \
+    adduser -S apk -G apk
 
-# Make the container filesystem writable by replication
-RUN chown -R replication:replication /usr /lib /var && \
-    chown -R replication:replication /etc/apk
+# Give apk user ownership of package manager and install locations
+RUN chown -R apk:apk \
+    /sbin/apk \
+    /etc/apk \
+    /var/lib/apk \
+    /var/cache/apk \
+    /usr \
+    /lib \
+    /bin
 
 COPY package*.json ./
 

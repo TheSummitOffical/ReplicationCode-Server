@@ -1,5 +1,10 @@
+import multipart from "@fastify/multipart";
+import staticPlugin from "@fastify/static";
+import path from "path";
+
 import resourcesRoutes from "./routes/resources.js";
 import shellRoutes from "./routes/shell.js";
+import profileRoutes from "./routes/profile.js";
 import Fastify from "fastify";
 
 import { AccountService } from "../auth/accounts.js";
@@ -37,6 +42,14 @@ const workspaces = new WorkspaceManager();
 const agents = new AgentManager();
 const executions = new ExecutionRequests();
 const permissions = new PermissionManager();
+
+await app.register(multipart);
+
+await app.register(staticPlugin, {
+  root: path.join(process.cwd(), "uploads"),
+  prefix: "/uploads/"
+});
+
 
 await app.register(llmRoutes);
 
@@ -167,8 +180,40 @@ app.get("/health", async () => {
   };
 });
 
-export default app;
 
 await app.register(shellRoutes);
+await app.register(profileRoutes);
 await app.register(resourcesRoutes);
 
+
+
+app.get("/whoami", {
+  preHandler: authMiddleware
+}, async (request) => {
+
+  const accountService =
+    new AccountService();
+
+  const account =
+    accountService.get(
+      request.user.id
+    );
+
+  if (!account) {
+    return {
+      error: "Account not found"
+    };
+  }
+
+  return {
+    id: account.id,
+    username: account.username,
+    email: account.email,
+    avatar: account.avatar,
+    description: account.description,
+    created_at: account.created_at
+  };
+
+});
+
+export default app;

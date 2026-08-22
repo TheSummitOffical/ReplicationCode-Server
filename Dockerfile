@@ -24,10 +24,11 @@ RUN addgroup -S replication && \
     adduser -S apk -G apk
 
 # Give apk user ownership of package manager and install locations
-RUN chown -R apk:apk \
+RUN mkdir -p /var/cache/apk && \
+    chown -R apk:apk \
     /sbin/apk \
     /etc/apk \
-    /var/lib/apk \
+    /lib/apk \
     /var/cache/apk \
     /usr \
     /lib \

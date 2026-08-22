@@ -21,7 +21,8 @@ RUN addgroup -S replication && \
     adduser -S replication -G replication
 
 # Make the container filesystem writable by replication
-RUN chown -R replication:replication /usr /etc /lib /var
+RUN chown -R replication:replication /usr /lib /var && \
+    chown -R replication:replication /etc/apk
 
 COPY package*.json ./
 

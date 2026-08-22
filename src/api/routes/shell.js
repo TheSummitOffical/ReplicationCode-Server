@@ -5,7 +5,7 @@ export default async function shellRoutes(app) {
 
   app.post("/shell", async (req, reply) => {
 
-    const { command } = req.body || {};
+    const { command, cwd } = req.body || {};
 
     if (!command) {
       return reply.code(400).send({
@@ -14,7 +14,8 @@ export default async function shellRoutes(app) {
     }
 
     const result = await runCommand({
-      command
+      command,
+      cwd
     });
 
     return {
